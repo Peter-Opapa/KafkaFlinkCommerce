@@ -47,11 +47,11 @@ Schema alignment matters: Sink DDLs in Postgres match the Flink sink schema exac
 
 ##### **Postgres Database Images Via PgAdmin UI**
 ###### Overview
-![overview](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/pgadmin.png)
+![overview](docs/pgadmin.png)
 ###### Raw Transactions data
-![transactions](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/transactions_table.png)
+![transactions](docs/transactions_table.png)
 ###### Sales Per Category
-![sales_per_category](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/per_category.png)
+![sales_per_category](docs/per_category.png)
 ## Connectors and classpath
 
 Flink discovers connectors from its classpath:
@@ -61,12 +61,12 @@ Flink discovers connectors from its classpath:
 
 ##### **Flink Web UI Images**
 ###### Overview
-![overview](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/jobs.png)
+![overview](docs/jobs.png)
 ###### Flink Job
-![flinkjob](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/flinkjob.png)
-![flinkjob](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/flink_jobs.png)
+![flinkjob](docs/flinkjob.png)
+![flinkjob](docs/flink_jobs.png)
 ###### Sample Job
-![samplejob](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/job1.png)
+![samplejob](docs/job1.png)
 
 ## Fault tolerance and recovery
 
@@ -88,13 +88,13 @@ Datadog Agent runs as a sidecar to:
 pgAdmin is provided to visualize Postgres contents interactively. See `docs/PGADMIN_GUIDE.md` for details.
 ##### **Datadog Web UI Images**
 ###### Overview
-![host](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/host.png)
-![overview](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/datadog_ui.png)
+![host](docs/host.png)
+![overview](docs/datadog_ui.png)
 ###### Flink Task Mnagager Monitor
-![flinkmonitor](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/flinkjonmgr.png)
+![flinkmonitor](docs/flinkjonmgr.png)
 ###### Monitor Graphs
-![graph1](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/grphs1.png)
-![graph2](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/graphs.png)
+![graph1](docs/grphs1.png)
+![graph2](docs/graphs.png)
 
 ## Repository structure (relevant parts)
 
