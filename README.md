@@ -2,7 +2,7 @@
 This project demonstrates a production-style streaming data pipeline, outlining the reasoning behind each component. The workflow begins with an event producer written in Python, which sends data to Kafka. From there, **Flink SQL** performs event-time processing before the results are stored in PostgreSQL sinks. The processed data can be visualized through **pgAdmin**, while end-to-end telemetry and monitoring are handled by **Datadog**. The focus of this project is on the architecture and dataflow—tracing what happens to each event from ingestion to storage, how event time is managed, and how the overall system maintains **robustness** and **reliability**.
 
 ## Architecture at a glance
-![Architecture](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/architecture.jpg)
+![Architecture](docs/architecture.jpg)
 
 **High level flow:**
 Producer (main.py) → Kafka topic (financial_transactions) → Flink SQL job (source + transforms) → JDBC sinks (transactions + aggregates) → Postgres
