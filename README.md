@@ -2,7 +2,7 @@
 This project demonstrates a production-style streaming data pipeline, outlining the reasoning behind each component. The workflow begins with an event producer written in Python, which sends data to Kafka. From there, **Flink SQL** performs event-time processing before the results are stored in PostgreSQL sinks. The processed data can be visualized through **pgAdmin**, while end-to-end telemetry and monitoring are handled by **Datadog**. The focus of this project is on the architecture and dataflow—tracing what happens to each event from ingestion to storage, how event time is managed, and how the overall system maintains **robustness** and **reliability**.
 
 ## Architecture at a glance
-![Architecture](docs\architecture.jpg)
+![Architecture](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/architecture.jpg)
 
 **High level flow:**
 Producer (main.py) → Kafka topic (financial_transactions) → Flink SQL job (source + transforms) → JDBC sinks (transactions + aggregates) → Postgres
@@ -47,11 +47,11 @@ Schema alignment matters: Sink DDLs in Postgres match the Flink sink schema exac
 
 ##### **Postgres Database Images Via PgAdmin UI**
 ###### Overview
-![overview](docs\pgadmin.png)
+![overview](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/pgadmin.png)
 ###### Raw Transactions data
-![transactions](docs\transactions_table.png)
+![transactions](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/transactions_table.png)
 ###### Sales Per Category
-![sales_per_category](docs\per_category.png)
+![sales_per_category](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/per_category.png)
 ## Connectors and classpath
 
 Flink discovers connectors from its classpath:
@@ -61,12 +61,12 @@ Flink discovers connectors from its classpath:
 
 ##### **Flink Web UI Images**
 ###### Overview
-![overview](docs\jobs.png)
+![overview](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/jobs.png)
 ###### Flink Job
-![flinkjob](docs\flinkjob.png)
-![flinkjob](docs\flink_jobs.png)
+![flinkjob](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/flinkjob.png)
+![flinkjob](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/flink_jobs.png)
 ###### Sample Job
-![samplejob](docs\job1.png)
+![samplejob](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/job1.png)
 
 ## Fault tolerance and recovery
 
@@ -88,13 +88,13 @@ Datadog Agent runs as a sidecar to:
 pgAdmin is provided to visualize Postgres contents interactively. See `docs/PGADMIN_GUIDE.md` for details.
 ##### **Datadog Web UI Images**
 ###### Overview
-![host](docs\host.png)
-![overview](docs\datadog_ui.png)
+![host](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/host.png)
+![overview](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/datadog_ui.png)
 ###### Flink Task Mnagager Monitor
-![flinkmonitor](docs\flinkjonmgr.png)
+![flinkmonitor](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/flinkjonmgr.png)
 ###### Monitor Graphs
-![graph1](docs\grphs1.png)
-![graph2](docs\graphs.png)
+![graph1](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/grphs1.png)
+![graph2](docs\https://github.com/Peter-Opapa/KafkaFlinkCommerce/blob/main/docs/graphs.png)
 
 ## Repository structure (relevant parts)
 
@@ -158,3 +158,4 @@ Optional: Start Datadog Agent
 docker compose up -d datadog
 ```
 Set your own DD_API_KEY/DD_SITE in docker-compose.yml or via environment overrides if you plan to use Datadog.
+
