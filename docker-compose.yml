@@ -1,0 +1,134 @@
+services:
+  broker:
+    image: confluentinc/cp-kafka:7.4.0
+    hostname: broker
+    container_name: broker
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+    environment:
+      # KRaft mode settings
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_NODE_ID: "1"
+      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_LISTENERS: "PLAINTEXT://broker:29092,PLAINTEXT_HOST://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@broker:9093"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+      KAFKA_JMX_PORT: "9101"
+      KAFKA_JMX_HOSTNAME: "localhost"
+    healthcheck:
+      test: [ "CMD", "bash", "-c", 'nc -z localhost 9092' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: kafka_commerce
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./sql:/sql
+    labels:
+      com.datadoghq.ad.check_names: '["postgres"]'
+      com.datadoghq.ad.init_configs: '[{}]'
+      com.datadoghq.ad.instances: >-
+        [{"host":"postgres","port":5432,"username":"postgres","password":"password","dbname":"kafka_commerce","collect_stat_io_metrics": false}]
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+
+  jobmanager:
+    image: flink:1.19.1-scala_2.12-java11
+    container_name: flink-jobmanager
+    command: jobmanager
+    ports:
+      - "8081:8081"
+    environment:
+      - |-
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+      - FLINK_CLASSPATH=/opt/flink/lib/*:/opt/flink/external-jars/*
+    volumes:
+      - ./flink-jars:/opt/flink/external-jars
+      - ./sql:/opt/sql
+    depends_on:
+      - broker
+
+  taskmanager:
+    image: flink:1.19.1-scala_2.12-java11
+    container_name: flink-taskmanager
+    command: taskmanager
+    environment:
+      - |-
+        FLINK_PROPERTIES=
+        jobmanager.rpc.address: jobmanager
+        taskmanager.numberOfTaskSlots: 2
+      - FLINK_CLASSPATH=/opt/flink/lib/*:/opt/flink/external-jars/*
+    volumes:
+      - ./flink-jars:/opt/flink/external-jars
+    depends_on:
+      - jobmanager
+
+  datadog:
+    image: datadog/agent:7
+    container_name: datadog-agent
+    environment:
+      - DD_API_KEY=1a188182f1993d5ffcf0a796bf425c36
+      - DD_SITE=us5.datadoghq.com
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_PROCESS_CONFIG_ENABLED=true
+      - DD_CONTAINER_COLLECT_ALL=true
+      - DD_SYSTEM_PROBE_ENABLED=true
+      - DD_NETWORK_CONFIG_ENABLED=true
+      - DD_CONTAINER_LABELS_AS_TAGS={"*":"*"}
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
+      - DD_APM_ENABLED=false
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
+      - /sys/kernel/debug:/sys/kernel/debug
+      - /lib/modules:/lib/modules:ro
+      - datadog-run:/opt/datadog-agent/run:rw
+      - ./datadog/conf.d/postgres.d:/etc/datadog-agent/conf.d/postgres.d:ro
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+    security_opt:
+      - apparmor:unconfined
+    pid: "host"
+    depends_on:
+      - broker
+      - postgres
+      - jobmanager
+      - taskmanager
+    restart: unless-stopped
+
+volumes:
+  datadog-run:
