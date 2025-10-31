@@ -159,3 +159,5 @@ docker compose up -d datadog
 ```
 Set your own DD_API_KEY/DD_SITE in docker-compose.yml or via environment overrides if you plan to use Datadog.
 
+<p align="center"><i>Made with ❤ by Peter Opapa</i></p>
+
